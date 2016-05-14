@@ -1,0 +1,14 @@
+#macro(admin_layout $active)
+<HTML>
+    $active
+</HTML>
+#end
+
+#macro( foo $color )
+<tr bgcolor=$color>
+    <td>Hi</td>
+</tr>
+<tr bgcolor=$color>
+    <td>There</td>
+</tr>
+#end

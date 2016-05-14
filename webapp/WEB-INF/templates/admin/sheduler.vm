@@ -1,0 +1,8 @@
+#@admin_layout("sheduler")
+Start date: 2015-03-24 06:00
+open time: 4 hour
+interval: 2 week
+<TABLE>
+
+</TABLE>
+#end

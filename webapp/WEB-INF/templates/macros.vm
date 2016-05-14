@@ -1,0 +1,130 @@
+#macro(script $src)
+<script type="text/javascript" src="/js/$src?t=$t"></script>
+#end
+
+#macro(nav_bar $active $title $package $menu)
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar">a</span>
+                <span class="icon-bar">b</span>
+                <span class="icon-bar">c</span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <img width="20" height="20" alt="Brand" src="/img/Boom-straight arm-small.jpg">
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                #foreach( $pages in $menu )
+                    #if( $pages.size() > 1 )
+                        <li class="dropdown#if( $pages.contains($active) ) active#end">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">#label(
+                                "menu.${package}.$pages[0]") <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                #foreach( $item in $pages )
+                                    <li#if( $active == $item ) class="active"#end><a href="/$package/$item">#label(
+                                        "menu.${package}.${item}")</a></li>
+                                #end
+                            </ul>
+                        </li>
+                    #else
+                        #set( $item = $pages[0] )
+                        <li#if( $active == $item ) class="active"#end><a href="/$package/$item">#label(
+                            "menu.${package}.${item}")</a></li>
+                    #end
+                #end
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+#end
+
+#macro(table )
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading">Panel heading</div>
+    <!-- Table -->
+    <table class="table">
+        #foo("green")
+    </table>
+</div>
+#end
+
+#macro(admin_layout $active)
+<!DOCTYPE html>
+<html lang="$Labels.getLanguage()">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Bootstrap -->
+    <link href="/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/webjars/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- x-editable (bootstrap version) -->
+    <link href="/webjars/x-editable-bootstrap/1.5.1/css/bootstrap-editable.css" rel="stylesheet">
+    <script src="/webjars/x-editable-bootstrap/1.5.1/js/bootstrap-editable.min.js"></script>
+    <!-- main.js -->
+    #script("main.js")
+</head>
+<body>
+
+<div class="page-header">
+    <h1>Gates:
+        <small>$Labels.get("menu.admin.$active")</small>
+    </h1>
+</div>
+    #nav_bar($active, "Dash Board", "admin", [["Dashboard"], ["phonebook"], ["CallHistory"]])
+    $bodyContent
+    $now
+<div class="footer pagination-centered">
+    <div class="pull-left">&copy; Valeri Kuzmin #if( $version )($version)#end</div>
+    <div class="pull-right languages">
+        #foreach( $language in ["et", "en", "ru"] )
+            #if( $language == $Labels.getLanguage() )
+                <strong>$Labels.get("menu.language.$language")</strong>
+            #else
+                <a href="#" class="language" data-language="$language">$Labels.get("menu.language.$language")</a>
+            #end
+        #end
+    </div>
+</div>
+
+</body>
+
+</HTML>
+#end
+
+
+#macro( foo $color )
+<tr>
+    <td>Hi</td>
+</tr>
+<tr>
+    <td>There</td>
+</tr>
+<tr>
+    <td>Macros</td>
+</tr>
+#end
+
+#macro(label $key)$Labels.get($key)#end

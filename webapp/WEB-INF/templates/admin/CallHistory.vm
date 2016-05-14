@@ -1,0 +1,25 @@
+#* @vtlvariable name="historyItems" type="java.util.Collection<ee.valja7.gate.PhoneEvent>" *#
+#@admin_layout("CallHistory")
+items: $historylenght
+<div class="container">
+    <table class="table table-striped" id="call_history">
+        #foreach( $entry in $historyItems )
+            <tr>
+                <td>$entry.callStarted</td>
+                <td>
+                    $entry.phone
+                </td>
+                <td>
+                    $entry.callerName
+                </td>
+                <td>
+                    $entry.enabled
+                </td>
+                <td>
+                    $entry.callEnded
+                </td>
+            </tr>
+        #end
+    </table>
+</div>
+#end

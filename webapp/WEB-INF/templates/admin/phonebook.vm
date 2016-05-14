@@ -1,0 +1,203 @@
+#@admin_layout("phonebook")
+<div class="container">
+    <div id="msg" class="alert alert-success" style="display: none;">New user created! Now editables submit
+        individually.
+    </div>
+
+    <table class="table table-striped" id="Phone_Book">
+
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Phone</th>
+            <th>Name</th>
+            <th>enabled</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tr>
+            <td>
+                <div id="new_id"></div>
+            </td>
+            <td><a href="#" class="myeditable editable editable-click editable-empty" id="new_phone" data-type="text"
+                   data-name="phone" data-original-title="Enter phone"
+                   style="background-color: rgba(0, 0, 0, 0);">Empty</a></td>
+            <td><a href="#" class="myeditable editable editable-click editable-empty" id="new_name" data-type="text"
+                   data-name="name" data-original-title="Enter name"
+                   style="background-color: rgba(0, 0, 0, 0);">Empty</a></td>
+            <td>
+                <a href="#" class="myeditable" id="new_enabled" data-type="select"
+                   data-source="[{value: 'true', text: 'enabled'},{value: 'false', text: 'disabled'},]"></a>
+
+            </td>
+            <td>
+                <div>
+                    <button id="save-btn" class="btn btn-primary">Save new user!</button>
+                    <button id="reset-btn" class="btn pull-right">Reset</button>
+                </div>
+            </td>
+        </tr>
+        #foreach( $entry in $pbentries )
+            <tr>
+                <td>$entry.id</td>
+                <td>
+                    <a href="#" class="pbentry" id="phone-$entry.getId()" data-name="phone"
+                       data-url="/admin/SavePhonebookEntry" data-type="text" data-pk="$entry.getId()"
+                       data-title="Enter Phone">
+                        $entry.getPhone()
+                    </a>
+                </td>
+
+
+                <td><a href="#" class="pbentry" id="name-$entry.getId()" data-name="name" data-type="text"
+                       data-pk="$entry.getId()" data-title="Enter Namne">
+                    $entry.getName()
+                </a>
+                </td>
+                <td>
+                    <a href="#" class="pbentry" data-name="enabled" id="enabled-$entry.getId()"></a>
+                </td>
+                <td></td>
+            </tr>
+        #end
+
+    </table>
+</div>
+<script>
+    $(document).ready(function () {
+        //toggle `popup` / `inline` mode
+        $.fn.editable.defaults.mode = 'inline';
+        $.fn.editable.defaults.source = [
+            {value: 'true', text: 'enabled'},
+            {value: 'false', text: 'disabled'},
+        ];
+        $('.myeditable').editable('setValue', null)  //clear values
+                .editable('option', 'pk', null)          //clear pk
+                .removeClass('editable-unsaved');        //remove bold css
+
+        //make username required
+        $('#new_phone').editable('option', 'validate', function (v) {
+            if (!v) return 'Required field!';
+        });
+
+//automatically show next editable
+        $('.myeditable').on('save.newuser', function () {
+            var that = this;
+            setTimeout(function () {
+                $(that).closest('td').next().find('.myeditable').editable('show');
+            }, 200);
+        });
+
+        $('#save-btn').show();
+        $('#msg').hide();
+        #foreach( $entry in $pbentries )
+            $('#phone-' + '$entry.getId()').editable({
+                pk: $entry.getId()
+                , url: '/admin/SavePhoneBookEntry'
+            });
+            $('#name-' + '$entry.getId()').editable({
+                pk: $entry.getId()
+                , url: '/admin/SavePhoneBookEntry'
+            });
+            $('#enabled-' + '$entry.getId()').editable({
+                type: 'select',
+                title: 'Select status',
+                placement: 'right',
+                value: '$entry.getEnabled()',
+                source: [
+                    {value: 'true', text: 'enabled'},
+                    {value: 'false', text: 'disabled'},
+                ]
+                , pk: $entry.getId()
+                , url: '/admin/SavePhoneBookEntry'
+            });
+
+        #end
+        $('#reset-btn').click(function () {
+            $('.myeditable').editable('setValue', null)  //clear values
+                    .editable('option', 'pk', null)          //clear pk
+                    .removeClass('editable-unsaved');        //remove bold css
+
+            $('#save-btn').show();
+            $('#msg').hide();
+        });
+
+        $('#save-btn').click(function () {
+            $('.myeditable').editable('submit', {
+                url: '/admin/SavePhoneBookEntry',
+                ajaxOptions: {
+                    dataType: 'json' //assuming json response
+                },
+                success: function (data, config) {
+                    if (data && data.id) {  //record created, response like {"id": 2}
+                        var table = document.getElementById("Phone_Book");// $('#Phone_Book');
+                        var row = table.insertRow(2);
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        var cell3 = row.insertCell(2);
+                        var cell4 = row.insertCell(3);
+                        row.insertCell(4);
+                        row.insertCell(5);
+
+                        // Add some text to the new cells:
+                        cell1.innerHTML = data.id;
+                        var a = document.createElement("a");
+                        a.id = 'phone-' + data.id;
+                        a.innerHTML = data.phone
+                        a.setAttribute('data-name', "phone");
+                        a.className = "newpbentry";
+                        cell2.appendChild(a);
+
+                        a = document.createElement("a");
+                        a.id = 'name-' + data.id;
+                        a.innerHTML = data.name
+                        a.setAttribute('data-name', "name");
+                        a.className = "newpbentry";
+                        cell3.appendChild(a);
+
+                        a = document.createElement("a");
+                        a.id = 'enabled-' + data.id;
+                        a.setAttribute('data-name', "enabled");
+                        a.className = "newpbentry";
+                        a.setAttribute('data-type', "select");
+                        a.setAttribute('data-source', "[{value: 'true', text: 'enabled'},{value: 'false', text: 'disabled'},]");
+
+                        cell4.appendChild(a);
+
+                        $('.newpbentry').addClass('editable')
+                                .editable('option', 'pk', data.id)
+                                .editable('option', 'url', '/admin/SavePhoneBookEntry');
+                        $('#enabled-' + data.id).editable('setValue', data.enabled);
+
+
+                        $('.myeditable').editable('setValue', null)  //clear values
+                                .editable('option', 'pk', null)          //clear pk
+                                .removeClass('editable-unsaved');        //remove bold css
+
+                        var msg = 'New user created! Now editables submit individually.';
+                        $('#msg').addClass('alert-success').removeClass('alert-error').html(msg).show();
+
+                    } else if (data && data.errors) {
+                        //server-side validation error, response like {"errors": {"username": "username already exist"} }
+                        config.error.call(this, data.errors);
+                    }
+                },
+                error: function (errors) {
+                    var msg = '';
+                    if (errors && errors.responseText) { //ajax error, errors = xhr object
+                        msg = errors.responseText;
+                    } else { //validation error (client-side or server-side)
+                        $.each(errors, function (k, v) {
+                            msg += k + ": " + v + "<br>";
+                        });
+                    }
+                    $('#msg').removeClass('alert-success').addClass('alert-error').html(msg).show();
+                }
+            });
+        });
+
+    });
+</script>
+
+#end

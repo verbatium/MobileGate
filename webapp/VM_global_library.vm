@@ -1,0 +1,18 @@
+#macro(admin_layout $active)
+<HTML>
+    $active
+</HTML>
+#end
+
+
+#macro( foo $color )
+<tr bgcolor=$color>
+    <td>Hi</td>
+</tr>
+<tr bgcolor=$color>
+    <td>There</td>
+</tr>
+<tr bgcolor=$color>
+    <td>webapp/VM_global_library.vm</td>
+</tr>
+#end

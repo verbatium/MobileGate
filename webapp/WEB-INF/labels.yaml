@@ -1,0 +1,24 @@
+menu.admin.Dashboard:
+  ru: "Dashboard"
+  et: "Dashboard"
+  en: "Dashboard"
+menu.admin.phonebook:
+  ru: "Телефонная книга"
+  et: "Telefoniraamat"
+  en: "Phone Book"
+menu.admin.CallHistory:
+  ru: "История звонков"
+  et: "Kõnede ajalugu"
+  en: "Call history"
+menu.language.en:
+  et: "in english"
+  en: "in english"
+  ru: "in english"
+menu.language.et:
+  et: "eesti keeles"
+  en: "eesti keeles"
+  ru: "eesti keeles"
+menu.language.ru:
+  et: "по-русски"
+  en: "по-русски"
+  ru: "по-русски"

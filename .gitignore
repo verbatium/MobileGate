@@ -1,0 +1,6 @@
+.attach*
+.idea/**
+*.log
+target/**/*
+lib/**/*
+*.iml

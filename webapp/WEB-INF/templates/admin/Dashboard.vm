@@ -1,0 +1,6 @@
+#@admin_layout("Dashboard")
+    #set( $foo = "Velocity" )
+Hello $foo World!
+    #set( $color= "red" )
+    #table()
+#end
