@@ -15,7 +15,7 @@ public class User {
     String displayName;
     Timestamp lastLogin;
 
-    public boolean isPasswordCorect(String password) {
+    public boolean isPasswordCorrect(String password) {
         return BCrypt.checkpw(password, this.password);
     }
 }

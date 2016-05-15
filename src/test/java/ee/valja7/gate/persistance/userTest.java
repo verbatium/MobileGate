@@ -9,6 +9,6 @@ public class userTest {
     public void checkPassword() throws Exception {
         User user = new User();
         user.password = "$2a$12$vKiTbvhoX./O106y59Oev.pOy1/pkWHfb2XfqbQp.x9ygm2/gsczy";
-        assertTrue(user.isPasswordCorect("admin"));
+        assertTrue(user.isPasswordCorrect("admin"));
     }
 }
