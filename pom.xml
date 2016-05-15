@@ -108,6 +108,12 @@
             <artifactId>hibernate-core</artifactId>
             <version>LATEST</version>
         </dependency>
+        <!-- http://mvnrepository.com/artifact/org.mindrot/jbcrypt -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.3m</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

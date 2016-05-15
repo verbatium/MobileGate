@@ -7,13 +7,5 @@
     <changeSet id="1" author="Valeri Kuzmin">
         <tagDatabase tag="v_0"/>
     </changeSet>
-    <changeSet id="2" author="Valeri Kuzmin">
-        <createTable tableName="Phones">
-            <column name="phoneNumber" type="VARCHAR(128)">
-                <constraints nullable="false"
-                             primaryKey="true"
-                             primaryKeyName="PhonesPK"/>
-            </column>
-        </createTable>
-    </changeSet>
+    <include file="liquibase/version1.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

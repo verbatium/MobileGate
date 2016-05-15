@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="2015-05-15 14:18:00" author="Valeri Kuzmin">
+        <createTable tableName="Users">
+            <column name="userName" type="varchar(100)">
+                <constraints primaryKey="true" primaryKeyName="UsersPK"/>
+            </column>
+            <column name="password" type="varchar(60)" remarks="Stores bcryptHash"/>
+            <column name="email" type="varchar(100)"/>
+            <column name="displayName" type="varchar(100)"/>
+            <column name="lastLogin" type="Timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2015-05-15 14:19:00" author="Valeri Kuzmin">
+        <createTable tableName="Phones">
+            <column name="phoneNumber" type="varchar(128)">
+                <constraints nullable="false"
+                             primaryKey="true"
+                             primaryKeyName="PhonesPK"/>
+            </column>
+            <column name="userName" type="varchar(100)">
+                <constraints referencedTableName="Users"
+                             referencedColumnNames="userName"
+                             foreignKeyName="PhonesUserFK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2015-05-15 14:21:00" author="Valeri Kuzmin">
+        <createTable tableName="Rights">
+            <column name="right" type="varchar(100)">
+            </column>
+            <column name="description" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2015-05-15 14:22:00" author="Valeri Kuzmin">
+        <createTable tableName="UserRights">
+            <column name="userName" type="varchar(100)">
+                <constraints referencedTableName="Users"
+                             referencedColumnNames="userName"
+                             foreignKeyName="UserRightsUserFK"
+                             primaryKey="true"
+                             primaryKeyName="UserRightsPK"/>
+            </column>
+            <column name="right" type="varchar(100)">
+                <constraints referencedTableName="Rights"
+                             referencedColumnNames="right"
+                             foreignKeyName="UserRightsRightFK"
+                             primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2015-05-15 14:41:00" author="Valeri Kuzmin">
+        <insert tableName="Rights">
+            <column name="right" value="SUPERUSER"/>
+            <column name="description" value="Most powerful user"/>
+        </insert>
+        <insert tableName="Rights">
+            <column name="right" value="LOGIN"/>
+            <column name="description" value="right to login to application"/>
+        </insert>
+    </changeSet>
+    <changeSet id="2015-05-15 14:42:00" author="Valeri Kuzmin">
+        <comment>Initial password admin</comment>
+        <insert tableName="Users">
+            <column name="userName" value="admin"/>
+            <column name="password" value="$2a$06$hmtpXWAa0KqXDJuHvdpvautQWrPoWqwHFvYg7SyqbTTIk6Q/s7oBm"/>
+            <column name="email" value="root@localhost"/>
+            <column name="displayName" value="Administrator"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

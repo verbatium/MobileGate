@@ -175,7 +175,7 @@
                                 .editable('option', 'pk', null)          //clear pk
                                 .removeClass('editable-unsaved');        //remove bold css
 
-                        var msg = 'New user created! Now editables submit individually.';
+                        var msg = 'New User created! Now editables submit individually.';
                         $('#msg').addClass('alert-success').removeClass('alert-error').html(msg).show();
 
                     } else if (data && data.errors) {
