@@ -2,10 +2,15 @@ package ee.valja7.gate;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import ee.valja7.gate.persistence.UserEntity;
 import org.apache.velocity.app.VelocityEngine;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import javax.inject.Singleton;
+import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.apache.velocity.runtime.RuntimeConstants.*;
 import static org.apache.velocity.runtime.log.Log4JLogChute.RUNTIME_LOG_LOG4J_LOGGER;
 
@@ -21,6 +26,21 @@ abstract class GuiceModule extends AbstractModule {
 
     private boolean isDevelopment() {
         return "Development".equals(getEnvironmentName());
+    }
+
+    @Provides
+    @Singleton
+    SessionFactory buildHibernateSessionFactory() {
+        Configuration configuration = new Configuration();
+
+        List<Class<?>> entities = asList(
+                UserEntity.class
+        );
+
+        for (Class<?> entity : entities) {
+            configuration.addAnnotatedClass(entity);
+        }
+        return configuration.buildSessionFactory();
     }
 
     @Provides

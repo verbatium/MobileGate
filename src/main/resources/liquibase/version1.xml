@@ -8,12 +8,13 @@
     <changeSet id="2015-05-15 14:18:00" author="Valeri Kuzmin">
         <createTable tableName="Users">
             <column name="userName" type="varchar(100)">
-                <constraints primaryKey="true" primaryKeyName="UsersPK"/>
+                <constraints primaryKey="true"
+                             primaryKeyName="UsersPK"/>
             </column>
             <column name="password" type="varchar(60)" remarks="Stores bcryptHash"/>
             <column name="email" type="varchar(100)"/>
             <column name="displayName" type="varchar(100)"/>
-            <column name="lastLogin" type="Timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="lastLogin" type="Timestamp"/>
         </createTable>
     </changeSet>
     <changeSet id="2015-05-15 14:19:00" author="Valeri Kuzmin">
@@ -33,6 +34,8 @@
     <changeSet id="2015-05-15 14:21:00" author="Valeri Kuzmin">
         <createTable tableName="Rights">
             <column name="right" type="varchar(100)">
+                <constraints primaryKey="true"
+                             primaryKeyName="RightsPK"/>
             </column>
             <column name="description" type="varchar(255)"/>
         </createTable>
@@ -57,7 +60,7 @@
     <changeSet id="2015-05-15 14:41:00" author="Valeri Kuzmin">
         <insert tableName="Rights">
             <column name="right" value="SUPERUSER"/>
-            <column name="description" value="Most powerful user"/>
+            <column name="description" value="Most powerful userEntity"/>
         </insert>
         <insert tableName="Rights">
             <column name="right" value="LOGIN"/>
