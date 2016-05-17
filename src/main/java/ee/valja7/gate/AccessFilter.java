@@ -20,7 +20,7 @@ public class AccessFilter implements Filter {
     public static final String PRINCIPAL = "ee.valja7.gate.principal";
     private static final Logger LOG = Logger.getLogger(AccessFilter.class);
     private static final String HOME = "/admin/home";
-    private static final String LOGIN = "login";
+    private static final String LOGIN = "/admin/login";
     private static final String LOGOUT = "/admin/logout";
     private static final Set<String> PUBLIC_URLS = ImmutableSet.of(
             HOME, LOGIN, LOGOUT
@@ -46,12 +46,13 @@ public class AccessFilter implements Filter {
                 filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
-            principal = authenticateBasic(request);
-//            if (uri.startsWith("/admin/login")) {
+            //principal = authenticateBasic(request);
+            response.sendRedirect("/admin/home");
+            return;
+//            if (uri.startsWith("/admin/")) {
 //
 //            } else {
-//                response.sendRedirect("/admin/home");
-//                return;
+//
 //            }
         }
 

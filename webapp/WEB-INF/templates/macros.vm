@@ -1,3 +1,4 @@
+#* @vtlvariable name="principal" type="ee.valja7.gate.Principal" *#
 #macro(script $src)
 <script type="text/javascript" src="/js/$src?t=$t"></script>
 #end
@@ -8,14 +9,15 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
 
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse"
                     data-target="#bs-example-navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar">a</span>
                 <span class="icon-bar">b</span>
                 <span class="icon-bar">c</span>
             </button>
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="home">
                 <img width="20" height="20" alt="Brand" src="/img/Boom-straight arm-small.jpg">
             </a>
         </div>
@@ -99,7 +101,7 @@
     #if($principal)
     <div>Welcome, $principal.getDisplayName()</div>
     #end
-
+    #login($principal, $logoutURL, $passwordLoginURL)
     $bodyContent
     $now
 <div class="footer pagination-centered">
@@ -136,4 +138,39 @@
 </tr>
 #end
 
-#macro(label $key)$Labels.get($key)#end
+#macro(label $key)$Labels.get($key )#end
+
+#macro(login $principal, $logoutURL, $passwordLoginURL)
+    #if ( $principal )
+    <div class="login-box logged-in">
+        <header>
+            <hgroup>
+                <h2>#label("gate.hello")</h2>
+                <p>$principal.getDisplayName()</p>
+            </hgroup>
+        </header>
+
+        <div class="logout">
+            <a id="trader-logout-button" href="$logoutURL" class="btn gray">#label("logout")</a>
+        </div>
+
+    </div>
+    #else
+    <div class="login-box not-logged-in">
+        <header>
+            <h2>#label("login"):</h2>
+        </header>
+        <div class="login-options">
+            <form id="password-login-form" method="post" action="login">
+                <p>#label("login.username"):</p>
+                <input type="text" name="username" value="" autocomplete="off"/>
+                <p>#label("login.password"):</p>
+                <input type="password" name="password" value=""/><br>
+                <input type="submit" class="btn gray" value="#label("password.login")"/>
+                <input type="button" class="btn gray" value="#label("forgot.password")"
+                       onclick="window.location.href='$passwordRecoveryURL'"/>
+            </form>
+        </div>
+    </div>
+    #end
+#end
