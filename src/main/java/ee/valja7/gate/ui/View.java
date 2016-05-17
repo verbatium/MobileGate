@@ -1,5 +1,6 @@
 package ee.valja7.gate.ui;
 
+import ee.valja7.gate.Principal;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -12,6 +13,7 @@ import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 public abstract class View extends RequestHandler {
+    public static final String PRINCIPAL = "ee.valja7.gate.principal";
     @Inject
     VelocityEngine velocity;
     private String contentType = "text/html";
@@ -28,6 +30,9 @@ public abstract class View extends RequestHandler {
         String requestURI = request.getRequestURI();
         Labels.setContext(requestURI.substring(1).replace('/', '.'));
         put("Labels", Labels.class);
+        put("logoutURL", "/admin/logout");
+        Principal principal = getPrincipal();
+        put("principal", principal);
         execute();
         if (this.getClass().getAnnotation(NoTemplate.class) != null || isJsonRedirect()) {
             return;
@@ -43,6 +48,10 @@ public abstract class View extends RequestHandler {
         OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
         template.merge(velocityContext, out);
         out.close();
+    }
+
+    private Principal getPrincipal() {
+        return (Principal) request.getAttribute(PRINCIPAL);
     }
 
     protected boolean isJsonRedirect() {

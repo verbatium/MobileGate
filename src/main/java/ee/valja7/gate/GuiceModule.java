@@ -5,6 +5,8 @@ import com.google.inject.Provides;
 import ee.valja7.gate.persistence.UserEntity;
 import org.apache.velocity.app.VelocityEngine;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 import javax.inject.Singleton;
@@ -40,7 +42,11 @@ abstract class GuiceModule extends AbstractModule {
         for (Class<?> entity : entities) {
             configuration.addAnnotatedClass(entity);
         }
-        return configuration.buildSessionFactory();
+        configuration.configure();
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
+                configuration.getProperties()).build();
+
+        return configuration.buildSessionFactory(serviceRegistry);
     }
 
     @Provides

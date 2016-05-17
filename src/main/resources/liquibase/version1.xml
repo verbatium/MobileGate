@@ -14,7 +14,7 @@
             <column name="password" type="varchar(60)" remarks="Stores bcryptHash"/>
             <column name="email" type="varchar(100)"/>
             <column name="displayName" type="varchar(100)"/>
-            <column name="lastLogin" type="Timestamp"/>
+            <column name="lastLogin" type="BIGINT"/>
         </createTable>
     </changeSet>
     <changeSet id="2015-05-15 14:19:00" author="Valeri Kuzmin">

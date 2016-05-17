@@ -7,7 +7,6 @@ import jssc.SerialPortList;
 import org.apache.log4j.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.hibernate.Session;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -17,7 +16,6 @@ public class Launcher {
     private static final Logger LOG = Logger.getLogger(Launcher.class);
     public static Injector injector;
     protected static String portName;
-    final Session session = HibernateContext.openSession();
     @Inject
     PhoneBookService phoneBookService;
     @Inject

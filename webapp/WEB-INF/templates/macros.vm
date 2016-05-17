@@ -93,7 +93,13 @@
         <small>$Labels.get("menu.admin.$active")</small>
     </h1>
 </div>
+
     #nav_bar($active, "Dash Board", "admin", [["Dashboard"], ["phonebook"], ["CallHistory"]])
+
+    #if($principal)
+    <div>Welcome, $principal.getDisplayName()</div>
+    #end
+
     $bodyContent
     $now
 <div class="footer pagination-centered">
@@ -105,9 +111,12 @@
             #else
                 <a href="#" class="language" data-language="$language">$Labels.get("menu.language.$language")</a>
             #end
-        #end
+            #end
     </div>
-</div>
+    <div class="logout">
+        <a id="logout-button" href="$logoutURL" class="btn gray">#label("logout")</a>
+    </div>
+    </div>
 
 </body>
 

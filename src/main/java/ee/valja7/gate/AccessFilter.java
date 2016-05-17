@@ -1,5 +1,6 @@
 package ee.valja7.gate;
 
+import com.google.common.collect.ImmutableSet;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Set;
 
 import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 
@@ -17,6 +19,13 @@ public class AccessFilter implements Filter {
 
     public static final String PRINCIPAL = "ee.valja7.gate.principal";
     private static final Logger LOG = Logger.getLogger(AccessFilter.class);
+    private static final String HOME = "/admin/home";
+    private static final String LOGIN = "login";
+    private static final String LOGOUT = "/admin/logout";
+    private static final Set<String> PUBLIC_URLS = ImmutableSet.of(
+            HOME, LOGIN, LOGOUT
+    );
+
     @Inject
     LoginService loginService;
 
@@ -33,16 +42,17 @@ public class AccessFilter implements Filter {
         Principal principal = session != null ? (Principal) session.getAttribute("principal") : null;
         String uri = request.getRequestURI();
         if (principal == null) {
-//            if (PUBLIC_URLS.contains(uri)) {
-//                chain.doFilter(servletRequest, servletResponse);
+            if (PUBLIC_URLS.contains(uri)) {
+                filterChain.doFilter(servletRequest, servletResponse);
+                return;
+            }
+            principal = authenticateBasic(request);
+//            if (uri.startsWith("/admin/login")) {
+//
+//            } else {
+//                response.sendRedirect("/admin/home");
 //                return;
 //            }
-            if (uri.startsWith("/consumer")) {
-                response.sendRedirect("/admin/Dashboard");
-                return;
-            } else {
-                principal = authenticateBasic(request);
-            }
         }
 
         if (principal == null) {

@@ -16,7 +16,7 @@ public class UserEntity implements Principal {
     String password;
     String email;
     String displayName;
-    Timestamp lastLogin;
+    Long lastLogin;
 
     public String getPassword() {
         return password;
@@ -35,11 +35,11 @@ public class UserEntity implements Principal {
     }
 
     public Timestamp getLastLogin() {
-        return lastLogin;
+        return new Timestamp(lastLogin);
     }
 
     public void setLastLogin(Timestamp lastLogin) {
-        this.lastLogin = lastLogin;
+        this.lastLogin = lastLogin.getTime();
     }
 
     @Override

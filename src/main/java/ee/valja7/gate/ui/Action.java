@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.Callable;
 
+import static javax.servlet.http.HttpServletResponse.SC_UNAUTHORIZED;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
 public abstract class Action extends RequestHandler implements Callable<String> {
@@ -20,8 +21,14 @@ public abstract class Action extends RequestHandler implements Callable<String> 
 
     public final void doExecute() throws Exception {
         String nextView = call();
-        if (nextView != null)
-            response.sendRedirect(nextView);
+        if (nextView != null) {
+            if (request.getSession(false) == null) {
+                response.addHeader("WWW-Authenticate", "Basic realm=\"Valja7.Gate\"");
+                response.sendError(SC_UNAUTHORIZED);
+            } else
+                response.sendRedirect(nextView);
+        }
+
     }
 
     @Override
