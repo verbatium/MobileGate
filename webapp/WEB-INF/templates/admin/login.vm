@@ -1,4 +1,0 @@
-#* @vtlvariable name="principal" type="ee.valja7.gate.Principal" *#
-#@admin_layout("login")
-
-#end
