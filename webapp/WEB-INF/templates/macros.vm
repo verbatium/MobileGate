@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/js/$src?t=$t"></script>
 #end
 
-#macro(nav_bar $active $title $package $menu)
+#macro(nav_bar $active $title $package $menu $principal)
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -44,9 +44,67 @@
                     #end
                 #end
             </ul>
+            #loginNavBar($principal, $logoutURL, $passwordLoginURL)
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+#end
+
+#macro(loginNavBar $principal)
+<ul class="nav navbar-nav navbar-right">
+    #if($principal)
+        <li><p class="navbar-text">Welcome, $principal.getDisplayName()</p>
+        </li>
+        <button type="button"
+                class="btn btn-default navbar-btn"
+                onclick="window.location.href='logout'">Log out
+        </button>
+    #else
+
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+            <ul id="login-dp" class="dropdown-menu">
+                <li>
+                    <div class="row">
+                        <div class="col-md-12">
+                        ##                        Login via
+                        ##                        <div class="social-buttons">
+                        ##                            <a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i> Facebook</a>
+                        ##                            <a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
+                        ##                        </div>
+                        ##                        or
+                            <form class="form" role="form" method="post" action="login" accept-charset="UTF-8"
+                                  id="login-nav">
+                                <div class="form-group">
+                                    <label class="sr-only" for="username">Email address</label>
+                                    <input type="text" class="form-control" name="username" id="username"
+                                           placeholder="username" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="password">Password</label>
+                                    <input type="password" class="form-control" name="password" id="password"
+                                           placeholder="Password" required>
+                                    <div class="help-block text-right"><a href="">Forget the password ?</a></div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                                </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"> keep me logged-in
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+                    ##                    <div class="bottom text-center">
+                    ##                        New here ? <a href="#"><b>Join Us</b></a>
+                    ##                    </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    #end
 #end
 
 #macro(table )
@@ -60,7 +118,7 @@
 </div>
 #end
 
-#macro(admin_layout $active)
+#macro(admin_layout $active $principal)
 <!DOCTYPE html>
 <html lang="$Labels.getLanguage()">
 <head>
@@ -86,6 +144,7 @@
     <link href="/webjars/x-editable-bootstrap/1.5.1/css/bootstrap-editable.css" rel="stylesheet">
     <script src="/webjars/x-editable-bootstrap/1.5.1/js/bootstrap-editable.min.js"></script>
     <!-- main.js -->
+    <link href="/main.css" rel="stylesheet">
     #script("main.js")
 </head>
 <body>
@@ -96,12 +155,10 @@
     </h1>
 </div>
 
-    #nav_bar($active, "Dash Board", "admin", [["Dashboard"], ["phonebook"], ["CallHistory"]])
+    #nav_bar($active, "Dash Board", "admin", [["Dashboard"], ["phonebook"], ["CallHistory"]],$principal)
 
-    #if($principal)
-    <div>Welcome, $principal.getDisplayName()</div>
-    #end
-    #login($principal, $logoutURL, $passwordLoginURL)
+
+##    #login($principal, $logoutURL, $passwordLoginURL)
     $bodyContent
     $now
 <div class="footer pagination-centered">
@@ -115,11 +172,7 @@
             #end
             #end
     </div>
-    <div class="logout">
-        <a id="logout-button" href="$logoutURL" class="btn gray">#label("logout")</a>
     </div>
-    </div>
-
 </body>
 
 </HTML>
@@ -139,38 +192,3 @@
 #end
 
 #macro(label $key)$Labels.get($key )#end
-
-#macro(login $principal, $logoutURL, $passwordLoginURL)
-    #if ( $principal )
-    <div class="login-box logged-in">
-        <header>
-            <hgroup>
-                <h2>#label("gate.hello")</h2>
-                <p>$principal.getDisplayName()</p>
-            </hgroup>
-        </header>
-
-        <div class="logout">
-            <a id="trader-logout-button" href="$logoutURL" class="btn gray">#label("logout")</a>
-        </div>
-
-    </div>
-    #else
-    <div class="login-box not-logged-in">
-        <header>
-            <h2>#label("login"):</h2>
-        </header>
-        <div class="login-options">
-            <form id="password-login-form" method="post" action="login">
-                <p>#label("login.username"):</p>
-                <input type="text" name="username" value="" autocomplete="off"/>
-                <p>#label("login.password"):</p>
-                <input type="password" name="password" value=""/><br>
-                <input type="submit" class="btn gray" value="#label("password.login")"/>
-                <input type="button" class="btn gray" value="#label("forgot.password")"
-                       onclick="window.location.href='$passwordRecoveryURL'"/>
-            </form>
-        </div>
-    </div>
-    #end
-#end

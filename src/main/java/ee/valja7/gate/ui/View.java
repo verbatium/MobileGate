@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.annotation.Retention;
+import java.util.Date;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -33,6 +34,7 @@ public abstract class View extends RequestHandler {
         put("logoutURL", "/admin/logout");
         Principal principal = getPrincipal();
         put("principal", principal);
+        put("now", new Date());
         execute();
         if (this.getClass().getAnnotation(NoTemplate.class) != null || isJsonRedirect()) {
             return;
