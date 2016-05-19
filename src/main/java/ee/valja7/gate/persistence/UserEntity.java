@@ -6,6 +6,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 @Entity(name = "Users")
@@ -18,12 +19,20 @@ public class UserEntity implements Principal {
     String displayName;
     Long lastLogin;
 
+    public UserEntity(String userName) {
+
+        this.userName = userName;
+    }
+
+    public UserEntity() {
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
     public String getEmail() {
@@ -35,7 +44,7 @@ public class UserEntity implements Principal {
     }
 
     public Timestamp getLastLogin() {
-        return new Timestamp(lastLogin);
+        return lastLogin == null ? null : new Timestamp(lastLogin);
     }
 
     public void setLastLogin(Timestamp lastLogin) {
@@ -67,6 +76,9 @@ public class UserEntity implements Principal {
 
     @Override
     public boolean checkPassword(String password) {
-        return BCrypt.checkpw(password, this.password);
+        boolean passwordCorrect = BCrypt.checkpw(password, this.password);
+        if (passwordCorrect)
+            setLastLogin(new Timestamp(new Date().getTime()));
+        return passwordCorrect;
     }
 }

@@ -1,0 +1,23 @@
+#* @vtlvariable name="entry" type="ee.valja7.gate.persistence.UserEntity" *#
+#@admin_layout("users")
+<div class="container-fluid">
+##    <div class="wrapper">
+    <div class="table">
+        <div class="row header blue">
+            <div class="cell">$Labels.get("menu.admin.username")</div>
+            <div class="cell">$Labels.get("menu.admin.displayName")</div>
+            <div class="cell">$Labels.get("menu.admin.email")</div>
+            <div class="cell">$Labels.get("menu.admin.lastLogin")</div>
+        </div>
+        #foreach( $entry in $users )
+            <div class="row">
+                <div class="cell">$entry.getUserName()</div>
+                <div class="cell">$entry.getDisplayName()</div>
+                <div class="cell">$entry.getEmail()</div>
+                <div class="cell">$!entry.getLastLogin()</div>
+            </div>
+        #end
+    </div>
+##    </div>
+</div>
+#end

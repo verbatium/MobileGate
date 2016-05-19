@@ -1,5 +1,6 @@
 package ee.valja7.gate.ui;
 
+import ee.valja7.gate.HibernateContext;
 import ee.valja7.gate.Principal;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -28,6 +29,7 @@ public abstract class View extends RequestHandler {
 
     @Override
     public void doExecute() throws Exception {
+        HibernateContext.openSession();
         String requestURI = request.getRequestURI();
         Labels.setContext(requestURI.substring(1).replace('/', '.'));
         put("Labels", Labels.class);
@@ -50,6 +52,7 @@ public abstract class View extends RequestHandler {
         OutputStreamWriter out = new OutputStreamWriter(response.getOutputStream(), "UTF-8");
         template.merge(velocityContext, out);
         out.close();
+        HibernateContext.closeSession();
     }
 
     private Principal getPrincipal() {

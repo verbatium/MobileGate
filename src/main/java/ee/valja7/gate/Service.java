@@ -5,7 +5,6 @@ import org.hibernate.Session;
 
 public class Service {
 
-
     protected Session getHibernate() {
         return HibernateContext.getSession();
     }

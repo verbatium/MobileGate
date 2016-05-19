@@ -26,3 +26,35 @@ menu.admin.home:
   et: "Tere tulemast"
   en: "Wellcome"
   ru: "Добро пожаловать"
+menu.admin.users:
+  et: "Kasutajad"
+  en: "Users"
+  ru: "пользователи"
+menu.admin.editUser:
+  et: "Uus kasutaja"
+  en: "New user"
+  ru: "новый пользователь"
+menu.admin.username:
+  et: "Kasutajanimi"
+  en: "Username"
+  ru: "имя пользователя"
+menu.admin.displayName:
+  et: "Kuvanimi"
+  en: "Display name"
+  ru: "Отображаемое имя"
+menu.admin.email:
+  et: "E-mail"
+  en: "E-mail"
+  ru: "E-mail"
+menu.admin.lastLogin:
+  et: "Viimane login"
+  en: "Last login"
+  ru: "последний вход"
+menu.admin.password:
+  et: "Salasõna"
+  en: "Password"
+  ru: "Пароль"
+menu.admin.save:
+  et: "Salvesta"
+  en: "Save"
+  ru: "Сохранить"

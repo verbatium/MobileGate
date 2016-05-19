@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -30,11 +29,5 @@ public class Phonebook extends View {
         List<PhoneBookEntry> phoneBookEntries = Collections.list(phoneBookService.entries.elements());
         put("phonebooklenght", phoneBookService.entries.size());
         put("pbentries", phoneBookEntries);
-        put("now", new Date());
-    }
-
-    @Override
-    protected boolean isJsonRedirect() {
-        return false;
     }
 }

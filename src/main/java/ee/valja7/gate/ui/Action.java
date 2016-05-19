@@ -1,6 +1,7 @@
 package ee.valja7.gate.ui;
 
 import com.google.gson.Gson;
+import ee.valja7.gate.HibernateContext;
 import org.apache.log4j.Logger;
 
 import javax.inject.Inject;
@@ -19,11 +20,12 @@ public abstract class Action extends RequestHandler implements Callable<String> 
     public abstract String execute();
 
     public final void doExecute() throws Exception {
+        HibernateContext.openSession();
         String nextView = call();
         if (nextView != null) {
-                response.sendRedirect(nextView);
+            response.sendRedirect(nextView);
         }
-
+        HibernateContext.closeSession();
     }
 
     @Override

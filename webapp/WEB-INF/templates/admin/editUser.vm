@@ -1,0 +1,85 @@
+#@admin_layout("editUser")
+<div class="wrapper">
+    <form class="form" role="form" method="post" action="saveUser" accept-charset="UTF-8"
+          id="edit-user">
+        <div class="table">
+            <div class="row header blue">
+                <div class="cell">Edit User</div>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <label for="username">$Labels.get("menu.admin.username")</label>
+                </div>
+                <div class="cell">
+                    <input type="text"
+                           class="form-control"
+                           name="username"
+                           id="username"
+                           placeholder="$Labels.get("menu.admin.username")"
+                           required>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <label for="email">$Labels.get("menu.admin.email")</label>
+                </div>
+                <div class="cell">
+                    <input type="email"
+                           class="form-control"
+                           name="email"
+                           id="enail"
+                           placeholder="$Labels.get("menu.admin.email")"
+                           required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <label for="displayName">$Labels.get("menu.admin.displayName")</label>
+                </div>
+                <div class="cell">
+                    <input type="text"
+                           class="form-control"
+                           name="displayName"
+                           id="displayName"
+                           placeholder="$Labels.get("menu.admin.displayName")"
+                           required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <label for="password1">$Labels.get("menu.admin.password")</label>
+                </div>
+                <div class="cell">
+                    <input type="text"
+                           class="form-control"
+                           name="password1"
+                           id="password1"
+                           placeholder="$Labels.get("menu.admin.password")"
+                           required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell">
+                    <label for="password2">$Labels.get("menu.admin.password")</label>
+                </div>
+                <div class="cell">
+                    <input type="text"
+                           class="form-control"
+                           name="password2"
+                           id="password2"
+                           placeholder="$Labels.get("menu.admin.password")"
+                           required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="cell">&nbsp;</div>
+                <div class="cell">
+                    <button type="submit" class="btn btn-primary">$Labels.get("menu.admin.save")</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+#end
