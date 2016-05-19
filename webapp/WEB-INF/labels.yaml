@@ -22,3 +22,7 @@ menu.language.ru:
   et: "по-русски"
   en: "по-русски"
   ru: "по-русски"
+menu.admin.home:
+  et: "Tere tulemast"
+  en: "Wellcome"
+  ru: "Добро пожаловать"
