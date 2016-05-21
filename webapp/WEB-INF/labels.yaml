@@ -58,3 +58,23 @@ menu.admin.save:
   et: "Salvesta"
   en: "Save"
   ru: "Сохранить"
+menu.admin.settings:
+  et: "Settings"
+  en: "Seaded"
+  ru: "настройки"
+menu.admin.settings.category:
+  et: "Category"
+  en: "kategooria"
+  ru: "категория"
+menu.admin.settings.name:
+  et: "Name"
+  en: "Nimi"
+  ru: "имя"
+menu.admin.settings.value:
+  et: "Value"
+  en: "Värtus"
+  ru: "значение"
+menu.admin.settings.description:
+  et: "Description"
+  en: "Kirjeldus"
+  ru: "Описание"

@@ -1,0 +1,21 @@
+#* @vtlvariable name="entry" type="ee.valja7.gate.persistence.PreferenceEntity" *#
+#@admin_layout("settings")
+<div class="container-fluid">
+    <div class="table">
+        <div class="row header blue">
+            <div class="cell">$Labels.get("menu.admin.settings.category")</div>
+            <div class="cell">$Labels.get("menu.admin.settings.name")</div>
+            <div class="cell">$Labels.get("menu.admin.settings.value")</div>
+            <div class="cell">$Labels.get("menu.admin.settings.description")</div>
+        </div>
+        #foreach( $entry in $entries)
+            <div class="row">
+                <div class="cell">$entry.getCategory()</div>
+                <div class="cell">$entry.getName()</div>
+                <div class="cell">$entry.getValue()</div>
+                <div class="cell">$!entry.description</div>
+            </div>
+        #end
+    </div>
+</div>
+#end

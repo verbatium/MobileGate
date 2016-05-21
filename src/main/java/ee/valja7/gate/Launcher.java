@@ -3,8 +3,12 @@ package ee.valja7.gate;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import ee.valja7.gate.commands.SimLock;
+import ee.valja7.gate.persistence.PreferencesService;
 import jssc.SerialPortList;
-import org.apache.log4j.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.RollingFileAppender;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -22,13 +26,19 @@ public class Launcher {
     PhoneEventListener eventListener;
     @Inject
     SchedulerService schedulerService;
+    @Inject
+    PreferencesService preferencesService;
     private SerialModem modem;
 
     public Launcher() {
     }
 
     public static void main(String[] args) {
-        BasicConfigurator.configure();
+        Launcher launcher = new Launcher();
+        DevelopmentGuiceModule guiceModule = new DevelopmentGuiceModule();
+        injector = Guice.createInjector(guiceModule);
+        injector.injectMembers(launcher);
+        //BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.INFO);
 
         try {
@@ -49,10 +59,6 @@ public class Launcher {
             }
         }
 
-        Launcher launcher = new Launcher();
-        DevelopmentGuiceModule guiceModule = new DevelopmentGuiceModule();
-        injector = Guice.createInjector(guiceModule);
-        injector.injectMembers(launcher);
         launcher.run();
     }
 

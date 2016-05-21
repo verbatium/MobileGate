@@ -15,21 +15,11 @@
         <property name="hibernate.hbm2ddl.auto">validate</property>
         <property name="hibernate.dialect">org.hibernate.dialect.SQLiteDialect</property>
 
-        <!--<property name="transaction.factory_class">org.hibernate.transaction.JTATransactionFactory        </property>-->
-        <!--<property name="connection.datasource">java:/comp/env/jdbc/MyDB</property>-->
-        <!--<property name="jta.UserTransaction">java:comp/UserTransaction</property>-->
-
-        <!-- mapping files -->
-
-        <!-- cache settings -->
-        <!--<class-cache class="org.hibernate.auction.Item" usage="read-write"/>-->
-        <!--<class-cache class="org.hibernate.auction.Bid" usage="read-only"/>-->
-        <!--<collection-cache collection="org.hibernate.auction.Item.bids" usage="read-write"/>-->
-
         <mapping class="ee.valja7.gate.persistence.UserEntity"/>
         <mapping class="ee.valja7.gate.persistence.PhoneEntity"/>
         <mapping class="ee.valja7.gate.persistence.RightEntity"/>
         <mapping class="ee.valja7.gate.persistence.UserRightEntity"/>
         <mapping class="ee.valja7.gate.persistence.UsersEntity"/>
+        <mapping class="ee.valja7.gate.persistence.PreferenceEntity"/>
     </session-factory>
 </hibernate-configuration>

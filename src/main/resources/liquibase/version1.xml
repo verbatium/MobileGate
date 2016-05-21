@@ -76,4 +76,17 @@
             <column name="displayName" value="Administrator"/>
         </insert>
     </changeSet>
+    <changeSet id="2015-05-15 10:30:00" author="Valeri Kuzmin">
+        <createTable tableName="Preferences">
+            <column name="category" type="varchar(100)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints primaryKeyName="PK_SETTINGS"
+                             primaryKey="true"/>
+            </column>
+            <column name="Value" type="varchar(255)"/>
+            <column name="description" type="varchar(300)"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
