@@ -2,6 +2,10 @@ package ee.valja7.gate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
+
+import java.util.concurrent.Callable;
 
 public class HibernateContext {
     private static ThreadLocal<Session> context = new ThreadLocal<>();
@@ -39,4 +43,38 @@ public class HibernateContext {
         }
     }
 
+    public static <T> T doInTransaction(Callable<T> callable) {
+        return doInTransaction(callable, false);
+    }
+
+    public static <T> T doInTransaction(Callable<T> callable, boolean flushAndClear) {
+        if (getSession().getTransaction().getStatus() == TransactionStatus.ACTIVE) {
+            try {
+                return callable.call();
+            } catch (Exception e) {
+                throw runtimeException(e);
+            }
+        }
+        Transaction transaction = getSession().beginTransaction();
+        try {
+            T result = callable.call();
+
+            if (flushAndClear) {
+                getSession().flush();
+                getSession().clear();
+            }
+
+            transaction.commit();
+            return result;
+        } catch (Exception e) {
+            throw runtimeException(e);
+        } finally {
+            if (transaction.getStatus() != TransactionStatus.COMMITTED)
+                transaction.rollback();
+        }
+    }
+
+    private static RuntimeException runtimeException(Exception e) {
+        return e instanceof RuntimeException ? (RuntimeException) e : new RuntimeException(e);
+    }
 }

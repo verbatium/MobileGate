@@ -11,7 +11,11 @@
         </div>
         #foreach( $entry in $users )
             <div class="row">
-                <div class="cell">$entry.getUserName()</div>
+                <div class="cell">
+                    <a href="editUser?username=$entry.getUserName()">
+                        $entry.getUserName()
+                    </a>
+                </div>
                 <div class="cell">$entry.getDisplayName()</div>
                 <div class="cell">$entry.getEmail()</div>
                 <div class="cell">$!entry.getLastLogin()</div>

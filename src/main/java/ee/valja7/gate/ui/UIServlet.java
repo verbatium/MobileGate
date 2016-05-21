@@ -1,6 +1,7 @@
 package ee.valja7.gate.ui;
 
 import com.google.inject.Injector;
+import ee.valja7.gate.HibernateContext;
 import ee.valja7.gate.Launcher;
 import org.apache.log4j.Logger;
 
@@ -41,6 +42,7 @@ public class UIServlet extends HttpServlet {
             response.sendError(SC_NOT_FOUND);
             return;
         }
+        HibernateContext.openSession();
         try {
             RequestHandler requestHandler = injector.getInstance(requestHandlerClass);
             requestHandler.request = request;
@@ -55,6 +57,8 @@ public class UIServlet extends HttpServlet {
                     e1.printStackTrace();
                 }
             }
+        } finally {
+            HibernateContext.closeSession();
         }
     }
 

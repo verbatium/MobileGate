@@ -20,12 +20,9 @@ public abstract class Action extends RequestHandler implements Callable<String> 
     public abstract String execute();
 
     public final void doExecute() throws Exception {
-        HibernateContext.openSession();
-        String nextView = call();
-        if (nextView != null) {
+        String nextView = HibernateContext.doInTransaction(this);
+        if (nextView != null)
             response.sendRedirect(nextView);
-        }
-        HibernateContext.closeSession();
     }
 
     @Override

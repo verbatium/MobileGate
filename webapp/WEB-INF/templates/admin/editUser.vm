@@ -1,5 +1,7 @@
+#* @vtlvariable name="user" type="ee.valja7.gate.persistence.UserEntity" *#
 #@admin_layout("editUser")
 <div class="wrapper">
+    <h3>#if($user)Edit#{else}New#end User</h3>
     <form class="form" role="form" method="post" action="saveUser" accept-charset="UTF-8"
           id="edit-user">
         <div class="table">
@@ -11,12 +13,18 @@
                     <label for="username">$Labels.get("menu.admin.username")</label>
                 </div>
                 <div class="cell">
+                    #if($user)
+                        <input type="hidden" name="username" value="${user.getUserName()}">
+                    #end
                     <input type="text"
                            class="form-control"
                            name="username"
                            id="username"
                            placeholder="$Labels.get("menu.admin.username")"
-                           required>
+                           required
+                        #if($user)
+                           value="$user.getUserName()"
+                           disabled#end>
                 </div>
 
             </div>
@@ -30,7 +38,8 @@
                            name="email"
                            id="enail"
                            placeholder="$Labels.get("menu.admin.email")"
-                           required>
+                           required
+                           value="$!user.getEmail()">
                 </div>
             </div>
             <div class="row">
@@ -43,7 +52,8 @@
                            name="displayName"
                            id="displayName"
                            placeholder="$Labels.get("menu.admin.displayName")"
-                           required>
+                           required
+                           value="$!user.getDisplayName()">
                 </div>
             </div>
             <div class="row">
@@ -56,7 +66,7 @@
                            name="password1"
                            id="password1"
                            placeholder="$Labels.get("menu.admin.password")"
-                           required>
+                           #if(!$user)required #end>
                 </div>
             </div>
             <div class="row">
@@ -69,7 +79,7 @@
                            name="password2"
                            id="password2"
                            placeholder="$Labels.get("menu.admin.password")"
-                           required>
+                           #if(!$user)required #end>
                 </div>
             </div>
             <div class="row">

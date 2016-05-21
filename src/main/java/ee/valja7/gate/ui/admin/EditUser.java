@@ -14,11 +14,9 @@ public class EditUser extends View {
     @Override
     public void execute() throws IOException {
         String username = request.getParameter("username");
-        UserEntity userEntity;
+        UserEntity userEntity = null;
         if (username != null)
             userEntity = userService.findByUsername(username);
-        else
-            userEntity = new UserEntity();
         put("user", userEntity);
     }
 }

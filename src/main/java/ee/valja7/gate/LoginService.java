@@ -13,9 +13,8 @@ public class LoginService {
     UserService userService;
 
     public Principal loginWithPassword(String username, String password) {
-//        HibernateContext.openSession();
+        HibernateContext.getSession();
         UserEntity principal = userService.findByUsername(username);
-//        HibernateContext.closeSession();
         boolean passwordIsCorrect = principal.checkPassword(password);
         if (passwordIsCorrect)
             userService.save((principal));
