@@ -1,4 +1,4 @@
-package ee.valja7.gate.commands;
+package ee.valja7.gate.modem.commands;
 
 import java.util.Arrays;
 

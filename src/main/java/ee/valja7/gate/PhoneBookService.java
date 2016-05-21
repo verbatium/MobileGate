@@ -1,8 +1,9 @@
 package ee.valja7.gate;
 
-import ee.valja7.gate.commands.CmeError;
-import ee.valja7.gate.commands.CommandState;
-import ee.valja7.gate.commands.McPlusCommand;
+import ee.valja7.gate.modem.SerialModem;
+import ee.valja7.gate.modem.commands.CmeError;
+import ee.valja7.gate.modem.commands.CommandState;
+import ee.valja7.gate.modem.commands.McPlusCommand;
 
 import javax.inject.Singleton;
 import java.util.Collections;

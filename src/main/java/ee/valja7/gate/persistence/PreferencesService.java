@@ -19,11 +19,11 @@ public class PreferencesService extends Service {
                 .list();
     }
 
-    public List<PreferenceEntity> getByCategoryAndName(Categories category, String name) {
-        return getHibernate()
+    public PreferenceEntity getByCategoryAndName(Categories category, String name) {
+        return (PreferenceEntity) getHibernate()
                 .createQuery("from PreferenceEntity p where p.category=:category and p.name=:name")
                 .setString("category", category.name())
                 .setString("name", name)
-                .list();
+                .uniqueResult();
     }
 }

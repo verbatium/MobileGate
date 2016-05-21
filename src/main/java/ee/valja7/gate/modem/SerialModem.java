@@ -1,6 +1,7 @@
-package ee.valja7.gate;
+package ee.valja7.gate.modem;
 
-import ee.valja7.gate.commands.*;
+import ee.valja7.gate.PhoneEventListener;
+import ee.valja7.gate.modem.commands.*;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
@@ -18,7 +19,7 @@ public class SerialModem {
     private String message = "";
     private boolean modemReady;
 
-    SerialModem(String port) {
+    public SerialModem(String port) {
         serialPort = new SerialPort(port);
         try {
             LOG.info("port open :" + serialPort.openPort());//Open port
@@ -33,7 +34,7 @@ public class SerialModem {
 
             writeString("ATZ");
             ModemCommand mc = new McAT(this);
-            LOG.info(mc.run());
+            LOG.debug(mc.run());
             modemReady = mc.status == CommandState.OK;
         } catch (SerialPortException ex) {
             ex.printStackTrace();
@@ -60,7 +61,7 @@ public class SerialModem {
 
     public void writeString(String str) {
         String encoding = CharsetDetector.detect(str);
-        LOG.info("DEBUG [" + encoding + "]: > " + str);
+        LOG.debug("[" + encoding + "]: > " + str);
         try {
             byte[] b = (str + "\r\n").getBytes(Charset.forName(encoding));
             serialPort.writeBytes(b);
@@ -75,26 +76,26 @@ public class SerialModem {
         super.finalize();
     }
 
-    SimLock pin() {
+    public SimLock pin() {
         McATCPIN mc = new McATCPIN(this);
         return mc.SimStatus();
     }
 
-    boolean unlock(String pin) {
+    public boolean unlock(String pin) {
         McATCPIN mc = new McATCPIN(this);
         return mc.unlock(pin);
     }
 
-    boolean isReady() {
+    public boolean isReady() {
         return this.modemReady;
     }
 
-    void SetTerminalError(int i) {
+    public void SetTerminalError(int i) {
         McPlusCommand mc = new McPlusCommand(this, "+CMEE");
         mc.run("=" + i); //+CPBR: (1-500),24,24
     }
 
-    void clip(PhoneEventListener listener) {
+    public void clip(PhoneEventListener listener) {
         McCLIP clipCmd = new McCLIP(this, listener);
         clipCmd.enable();
     }
@@ -113,7 +114,7 @@ public class SerialModem {
                             if (start < i - 1) {
                                 encoding = CharsetDetector.detect(buffer, start, i - start);
                                 s = message + new String(buffer, start, i - start, encoding);
-                                LOG.info("DEBUG [" + encoding + "]: < " + s);
+                                LOG.debug("[" + encoding + "]: < " + s);
                                 processMessage(s);
                                 message = "";
                             }
@@ -135,16 +136,16 @@ public class SerialModem {
             } else if (event.isCTS()) {
                 //If CTS line has changed state
                 if (event.getEventValue() == 1) {//If line is ON
-                    LOG.info("CTS - ON");
+                    LOG.debug("CTS - ON");
                 } else {
-                    LOG.info("CTS - OFF");
+                    LOG.debug("CTS - OFF");
                 }
             } else if (event.isDSR()) {
                 ///If DSR line has changed state
                 if (event.getEventValue() == 1) {//If line is ON
-                    LOG.info("DSR - ON");
+                    LOG.debug("DSR - ON");
                 } else {
-                    LOG.info("DSR - OFF");
+                    LOG.debug("DSR - OFF");
                 }
             }
         }

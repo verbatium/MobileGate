@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration>
+    <appender name="DB" class="org.apache.log4j.jdbc.JDBCAppender">
+        <param name="url" value="jdbc:sqlite:gate.db"/>
+        <param name="driver" value="org.sqlite.JDBC"/>
+        <param name="user" value=""/>
+        <param name="password" value=""/>
+        <param name="sql"
+               value="INSERT INTO Logs(UserName,Date,Logger,Level,Message) VALUES('%x','%d','%C','%p','%m')"/>
+        <layout class="org.apache.log4j.PatternLayout">
+        </layout>
+    </appender>
+    <logger name="log4j.rootLogger" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="DB"/>
+    </logger>
+    <logger name="ee.valja7.gate" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="DB"/>
+    </logger>
+    <logger name="org.jboss.logging" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="DB"/>
+    </logger>
+    <logger name="log4j.logger.org.hibernate.SQL">
+        <level value="DEBUG"/>
+        <appender-ref ref="DB"/>
+    </logger>
+    <logger name="log4j.logger.org.hibernate.type">
+        <level value="TRACE"/>
+        <appender-ref ref="DB"/>
+    </logger>
+    <root>
+        <level value="DEBUG"/>
+        <appender-ref ref="DB"/>
+    </root>
+</log4j:configuration>

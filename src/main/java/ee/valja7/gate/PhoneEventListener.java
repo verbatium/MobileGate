@@ -1,5 +1,6 @@
 package ee.valja7.gate;
 
+import ee.valja7.gate.modem.SerialModem;
 import org.apache.log4j.Logger;
 
 import javax.inject.Singleton;

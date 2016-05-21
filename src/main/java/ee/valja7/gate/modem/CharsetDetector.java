@@ -1,19 +1,19 @@
-package ee.valja7.gate;
+package ee.valja7.gate.modem;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
-class CharsetDetector {
+public class CharsetDetector {
     private final static String iso8859_13 = "öäüõžš" + "öäüõžš".toUpperCase();
     private final static String iso8859_5 = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя" + "абвгдеёжзийклмнопрстуфхцчшщъыьэюя".toUpperCase();
     private final static byte[] iso8859_13Bytes = iso8859_13.getBytes(Charset.forName("ISO-8859-13"));
     private final static byte[] iso8859_5Bytes = iso8859_5.getBytes(Charset.forName("ISO-8859-5"));
 
-    static String detect(byte[] buffer) {
+    public static String detect(byte[] buffer) {
         return detect(buffer, 0, buffer.length);
     }
 
-    static String detect(byte[] buffer, int position, int size) {
+    public static String detect(byte[] buffer, int position, int size) {
         int e3 = 0;
         int e5 = 0;
         Arrays.sort(iso8859_13Bytes);

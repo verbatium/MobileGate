@@ -1,6 +1,6 @@
-package ee.valja7.gate.commands;
+package ee.valja7.gate.modem.commands;
 
-import ee.valja7.gate.SerialModem;
+import ee.valja7.gate.modem.SerialModem;
 import org.apache.log4j.Logger;
 
 public class McATCPIN extends McPlusCommand {

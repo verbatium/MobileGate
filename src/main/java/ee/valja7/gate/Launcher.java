@@ -2,18 +2,18 @@ package ee.valja7.gate;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import ee.valja7.gate.commands.SimLock;
+import ee.valja7.gate.modem.SerialModem;
+import ee.valja7.gate.modem.commands.SimLock;
 import ee.valja7.gate.persistence.PreferencesService;
 import jssc.SerialPortList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.RollingFileAppender;
+import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import javax.inject.Inject;
-import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 
 public class Launcher {
@@ -34,19 +34,17 @@ public class Launcher {
     }
 
     public static void main(String[] args) {
+        org.eclipse.jetty.util.log.Log.setLog(null);
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource("log4j.properties");
+        PropertyConfigurator.configure(url);
+
         Launcher launcher = new Launcher();
         DevelopmentGuiceModule guiceModule = new DevelopmentGuiceModule();
         injector = Guice.createInjector(guiceModule);
-        injector.injectMembers(launcher);
-        //BasicConfigurator.configure();
-        Logger.getRootLogger().setLevel(Level.INFO);
 
-        try {
-            RollingFileAppender fileAppender = new RollingFileAppender(new PatternLayout("%d{dd-MM-yyyy HH:mm:ss} %C %L %-5p:%m%n"), "file.log");
-            LOG.addAppender(fileAppender);
-        } catch (IOException var7) {
-            var7.printStackTrace();
-        }
+        injector.injectMembers(launcher);
+        Logger.getRootLogger().setLevel(Level.INFO);
 
         LOG.info("TEST LOG ENTRY");
         if (args.length > 1) {

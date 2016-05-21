@@ -59,22 +59,22 @@ menu.admin.save:
   en: "Save"
   ru: "Сохранить"
 menu.admin.settings:
-  et: "Settings"
-  en: "Seaded"
+  en: "Settings"
+  et: "Seaded"
   ru: "настройки"
 menu.admin.settings.category:
-  et: "Category"
-  en: "kategooria"
+  en: "Category"
+  et: "kategooria"
   ru: "категория"
 menu.admin.settings.name:
-  et: "Name"
-  en: "Nimi"
+  en: "Name"
+  et: "Nimi"
   ru: "имя"
 menu.admin.settings.value:
-  et: "Value"
-  en: "Värtus"
+  en: "Value"
+  et: "Värtus"
   ru: "значение"
 menu.admin.settings.description:
-  et: "Description"
-  en: "Kirjeldus"
+  en: "Description"
+  et: "Kirjeldus"
   ru: "Описание"

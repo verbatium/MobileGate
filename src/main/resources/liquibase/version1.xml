@@ -89,4 +89,16 @@
             <column name="description" type="varchar(300)"/>
         </createTable>
     </changeSet>
+    <changeSet id="2015-05-15 15:35:00" author="Valeri Kuzmin">
+        <createTable tableName="Logs">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints primaryKey="true"></constraints>
+            </column>
+            <column name="UserName" type="varchar(100)"/>
+            <column name="Date" type="varchar(20)"/>
+            <column name="Logger" type="varchar(255)"/>
+            <column name="Level" type="varchar(10)"/>
+            <column name="Message" type="varchar(1000)"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

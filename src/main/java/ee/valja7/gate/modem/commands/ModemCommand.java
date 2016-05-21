@@ -1,6 +1,6 @@
-package ee.valja7.gate.commands;
+package ee.valja7.gate.modem.commands;
 
-import ee.valja7.gate.SerialModem;
+import ee.valja7.gate.modem.SerialModem;
 import org.apache.log4j.Logger;
 
 import java.util.regex.Pattern;
@@ -31,7 +31,7 @@ public abstract class ModemCommand {
             this.modem.lastCommand = this;
             modem.writeString(command + param);
         }
-        LOG.info("DEBUG: wait for command response");
+        LOG.debug("wait for command response");
         while (status == CommandState.WAIT) {
             try {
                 wait();
@@ -39,7 +39,7 @@ public abstract class ModemCommand {
                 e.printStackTrace();
             }
         }
-        LOG.info("DEBUG: command ended: " + status.toString());
+        LOG.debug("command ended: " + status.toString());
         this.modem.lastCommand = null;
         try {
             Thread.sleep(1000);
@@ -63,16 +63,16 @@ public abstract class ModemCommand {
             notifyAll();
         } else if (message.startsWith("+CME ERROR:")) {
             status = CommandState.CME_ERROR;
-            LOG.info("ERR: '" + message + "'");
+            LOG.debug("ERR: '" + message + "'");
             String s = message.substring("+CME ERROR: ".length());
             //sometimes message come twice
             int i = s.indexOf('+');
             if (i >= 0)
                 s = s.substring(0, i);
-            LOG.info("ERR: '" + s + "'");
+            LOG.debug("ERR: '" + s + "'");
             int error = Integer.parseInt(s);
             CmeError c = CmeError.GetByCode(error);
-            LOG.info("ERR: '" + c.getDescription() + "'");
+            LOG.debug("ERR: '" + c.getDescription() + "'");
             this.cmeError = c;
             notifyAll();
         } else if (pattern != null && pattern.matcher(message).matches()) {
