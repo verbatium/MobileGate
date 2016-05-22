@@ -1,3 +1,32 @@
 #@admin_layout("modem")
-<div>This page not iplemented</div>
+<div class="container">
+    <div class="row">
+        <label class="col-sm-6 control-label">Serial port</label>
+        <div class="col-sm-6 selectContainer">
+            <select class="form-control" name="serialPort">
+                <option value="">Select Port</option>
+                <option value="COM1">COM1</option>
+                <option value="COM2">COM2</option>
+                <option value="COM3">COM3</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <label class="col-sm-6 control-label">Modem Status: Not Connected</label>
+        <button type="submit" class="col-sm-6 btn btn-default">Connect</button>
+        <div class="col-sm-6"></div>
+    </div>
+    <div class="row">
+        <label class="col-sm-6 control-label">Gate Status: OPEN</label>
+        <button type="submit" class="col-sm-6 btn btn-default">Close</button>
+        <div class="col-sm-6"></div>
+    </div>
+    <div class="row">
+        <label class="col-sm-6">
+            Scheduller Next opening time:
+        </label>
+        <div class="col-sm-6">2016-05-31T06:00:00.000+03:00</div>
+        <div class="col-sm-6"></div>
+    </div>
+</div>
 #end

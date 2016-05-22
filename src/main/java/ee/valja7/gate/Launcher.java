@@ -7,6 +7,9 @@ import ee.valja7.gate.modem.PhoneEventListener;
 import ee.valja7.gate.modem.SchedulerService;
 import ee.valja7.gate.modem.SerialModem;
 import ee.valja7.gate.modem.commands.SimLock;
+import ee.valja7.gate.persistence.Categories;
+import ee.valja7.gate.persistence.PreferenceEntity;
+import ee.valja7.gate.persistence.PreferenceTypes;
 import ee.valja7.gate.persistence.PreferencesService;
 import jssc.SerialPortList;
 import org.apache.log4j.Level;
@@ -14,10 +17,15 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.hibernate.Session;
 
 import javax.inject.Inject;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Launcher {
     private static final Logger LOG = Logger.getLogger(Launcher.class);
@@ -32,6 +40,7 @@ public class Launcher {
     @Inject
     PreferencesService preferencesService;
     private SerialModem modem;
+    private Map<String, PreferenceEntity> preferenceces;
 
     public Launcher() {
     }
@@ -88,21 +97,33 @@ public class Launcher {
     }
 
     private void init_modem() {
-        this.modem = new SerialModem("/dev/ttyUSB2");
+        HibernateContext.openSession();
+        List<PreferenceEntity> prefList = preferencesService.getByCategory(Categories.Modem);
+        preferenceces = prefList.stream()
+                .collect(Collectors.toMap(PreferenceEntity::getName,
+                        Function.identity()));
+
+        portName = get("port", "/dev/ttyUSB2");
+        HibernateContext.closeSession();
+
+        this.modem = new SerialModem(portName);
         if (!this.modem.isReady()) {
-            System.exit(-1);
+            LOG.error("Modem is not ready");
+            return;
         }
 
         LOG.info("Modem ready");
         this.modem.SetTerminalError(1);
         if (!this.enterPin("0000")) {
-            System.exit(-2);
+            LOG.error("Wrong Pin");
+            return;
         }
 
         LOG.info("pin ok");
         this.readPhoneBook();
         LOG.info("PhoneBook read");
         this.enableClip();
+        save();
     }
 
     private void enableClip() {
@@ -118,5 +139,35 @@ public class Launcher {
         SimLock sl = this.modem.pin();
         LOG.info("Lock:" + sl.toString());
         return sl == SimLock.READY || sl == SimLock.SIM_PIN && this.modem.unlock(pin);
+    }
+
+    private String get(String name, String defaultValue) {
+        PreferenceEntity preferenceEntity = getPreferenceEntity(name, defaultValue);
+        return preferenceEntity.getValue();
+    }
+
+    private PreferenceEntity getPreferenceEntity(String name, String defaultValue) {
+        PreferenceEntity preferenceEntity;
+        if (preferenceces.containsKey(name)) {
+            preferenceEntity = preferenceces.get(name);
+        } else {
+            preferenceEntity = new PreferenceEntity(Categories.Modem, name, PreferenceTypes.Long, defaultValue);
+            preferenceces.put(name, preferenceEntity);
+        }
+        return preferenceEntity;
+    }
+
+    public void save() {
+        Session session = HibernateContext.openSession();
+        put("port", portName);
+        preferenceces.values().stream().forEach(o -> session.saveOrUpdate(o));
+        session.flush();
+
+        HibernateContext.closeSession();
+    }
+
+    private void put(String name, String value) {
+        PreferenceEntity preferenceEntity = getPreferenceEntity(name, value);
+        preferenceEntity.setValue(value);
     }
 }
