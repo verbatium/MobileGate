@@ -11,7 +11,6 @@ import ee.valja7.gate.persistence.Categories;
 import ee.valja7.gate.persistence.PreferenceEntity;
 import ee.valja7.gate.persistence.PreferenceTypes;
 import ee.valja7.gate.persistence.PreferencesService;
-import jssc.SerialPortList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -21,7 +20,6 @@ import org.hibernate.Session;
 
 import javax.inject.Inject;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -32,6 +30,9 @@ public class Launcher {
     private static final Logger LOG = Logger.getLogger(Launcher.class);
     public static Injector injector;
     protected static String portName;
+    protected static String httpPort;
+    protected static SerialModem modem;
+
     @Inject
     PhoneBookService phoneBookService;
     @Inject
@@ -40,7 +41,6 @@ public class Launcher {
     SchedulerService schedulerService;
     @Inject
     PreferencesService preferencesService;
-    private SerialModem modem;
     private Map<String, PreferenceEntity> preferences;
 
     public Launcher() {
@@ -54,21 +54,11 @@ public class Launcher {
 
         Launcher launcher = new Launcher();
         DevelopmentGuiceModule guiceModule = new DevelopmentGuiceModule();
+
         injector = Guice.createInjector(guiceModule);
-
         injector.injectMembers(launcher);
-        Logger.getRootLogger().setLevel(Level.INFO);
 
-        LOG.info("TEST LOG ENTRY");
-        if (args.length > 1) {
-            portName = args[1];
-        } else {
-            String[] portNames = SerialPortList.getPortNames();
-            if (portNames.length > 0) {
-                System.out.println("Use command CONNECT {portName}.\n Available ports:\n");
-                Arrays.stream(portNames).forEach(System.out::println);
-            }
-        }
+        Logger.getRootLogger().setLevel(Level.INFO);
 
         launcher.run();
     }
@@ -81,11 +71,15 @@ public class Launcher {
         return webAppContext;
     }
 
+    public SchedulerService getSchedulerService() {
+        return schedulerService;
+    }
+
     private void run() {
-        CompletableFuture.runAsync(this::loadPreferences)
-                .thenRun(this::init_modem)
+        loadPreferences();
+        CompletableFuture.runAsync(this::init_modem)
                 .thenRun(this::setSchedulerFunction);
-        Server server = new Server(8080);
+        Server server = new Server(Integer.valueOf(httpPort));
         server.setHandler(createHandler());
 
         try {
@@ -98,11 +92,11 @@ public class Launcher {
     }
 
     private void setSchedulerFunction() {
-        this.schedulerService.openGate(this::openGate);
+        schedulerService.openGate(this::openGate);
     }
 
     private void openGate() {
-        Launcher.this.modem.writeString("+CLIP: \"+372000000\",145,,,\"@Manual Open\",0");
+        modem.writeString("+CLIP: \"+372000000\",145,,,\"@Manual Open\",0");
     }
 
 
@@ -113,19 +107,24 @@ public class Launcher {
                 .collect(Collectors.toMap(PreferenceEntity::getName,
                         Function.identity()));
         portName = get("port", "/dev/ttyUSB2");
+        httpPort = get("httpPort", "8080");
         HibernateContext.closeSession();
+    }
+
+    public SerialModem getModem() {
+        return modem;
     }
 
     private void init_modem() {
 
-        this.modem = new SerialModem(portName);
-        if (!this.modem.isReady()) {
+        modem = new SerialModem(portName);
+        if (!modem.isReady()) {
             LOG.error("Modem is not ready");
             return;
         }
 
         LOG.info("Modem ready");
-        this.modem.SetTerminalError(1);
+        modem.SetTerminalError(1);
         if (!this.enterPin("0000")) {
             LOG.error("Wrong Pin");
             return;
@@ -139,18 +138,18 @@ public class Launcher {
     }
 
     private void enableClip() {
-        this.eventListener.initModem(this.modem);
-        this.modem.clip(this.eventListener);
+        this.eventListener.initModem(modem);
+        modem.clip(this.eventListener);
     }
 
     private void readPhoneBook() {
-        this.phoneBookService.read(this.modem);
+        this.phoneBookService.read(modem);
     }
 
     private boolean enterPin(String pin) {
-        SimLock sl = this.modem.pin();
+        SimLock sl = modem.pin();
         LOG.info("Lock:" + sl.toString());
-        return sl == SimLock.READY || sl == SimLock.SIM_PIN && this.modem.unlock(pin);
+        return sl == SimLock.READY || sl == SimLock.SIM_PIN && modem.unlock(pin);
     }
 
     private String get(String name, String defaultValue) {
@@ -181,5 +180,9 @@ public class Launcher {
     private void put(String name, String value) {
         PreferenceEntity preferenceEntity = getPreferenceEntity(name, value);
         preferenceEntity.setValue(value);
+    }
+
+    public String getPortName() {
+        return portName;
     }
 }

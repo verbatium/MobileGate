@@ -9,6 +9,10 @@ import org.apache.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class SerialModem {
     private static final Logger LOG = Logger.getLogger(SerialModem.class);
@@ -17,7 +21,6 @@ public class SerialModem {
     private SerialPort serialPort;
     private String message = "";
     private boolean modemReady;
-
     public SerialModem(String port) {
         serialPort = new SerialPort(port);
         try {
@@ -38,6 +41,20 @@ public class SerialModem {
         } catch (SerialPortException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private static CompletableFuture writeBytesToPort(SerialPort serialPort, byte[] b) {
+        return CompletableFuture.runAsync(() -> {
+            try {
+                serialPort.writeBytes(b);
+            } catch (SerialPortException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public SerialPort getSerialPort() {
+        return serialPort;
     }
 
     private void processMessage(String message) {
@@ -61,12 +78,17 @@ public class SerialModem {
     public void writeString(String str) {
         String encoding = CharsetDetector.detect(str);
         LOG.debug("[" + encoding + "]: > " + str);
+        byte[] b = (str + "\r\n").getBytes(Charset.forName(encoding));
         try {
-            byte[] b = (str + "\r\n").getBytes(Charset.forName(encoding));
-            serialPort.writeBytes(b);
-        } catch (SerialPortException e) {
+            writeBytesToPort(serialPort, b).get(2, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override

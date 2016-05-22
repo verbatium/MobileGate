@@ -27,15 +27,12 @@ public class SchedulerService {
     private final ScheduledExecutorService mainScheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture<?> openHandle;
     private ScheduledFuture<?> closeHandle;
-
-
     private Date openTime;
     private Date closeTime;
     private Long openedTime;
     private Long interval;
     private Long repeatInterval;
     private Map<String, PreferenceEntity> preferenceces;
-
     @Inject
     public SchedulerService(PreferencesService prefs) {
         Session session = HibernateContext.openSession();
@@ -54,6 +51,14 @@ public class SchedulerService {
         HibernateContext.closeSession();
         nextTime();
         save();
+    }
+
+    public Date getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(Date d) {
+        openTime = d;
     }
 
     private Long getLong(String name, Long defaultValue) {
@@ -104,10 +109,6 @@ public class SchedulerService {
     private void put(String name, String value) {
         PreferenceEntity preferenceEntity = getPreferenceEntity(name, value);
         preferenceEntity.setValue(value);
-    }
-
-    public void setOpenTime(Date d) {
-        openTime = d;
     }
 
     private void nextTime() {
