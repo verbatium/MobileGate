@@ -157,8 +157,8 @@
     </h1>
 </div>
 
-    #nav_bar($active, "Dash Board", "admin", [["Dashboard"], ["phonebook"], ["CallHistory"], ["users",
-        "editUser"],["settings"]],$principal)
+    #nav_bar($active, "Dash Board", "admin", [["Dashboard"], ["modem","phonebook","CallHistory"], ["users",
+        "editUser"],["settings"],["logs"]],$principal)
 
 
 ##    #login($principal, $logoutURL, $passwordLoginURL)

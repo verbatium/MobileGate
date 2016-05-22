@@ -1,6 +1,6 @@
 package ee.valja7.gate.ui.admin;
 
-import ee.valja7.gate.PhoneEventListener;
+import ee.valja7.gate.modem.PhoneEventListener;
 import ee.valja7.gate.ui.View;
 import org.apache.log4j.Logger;
 

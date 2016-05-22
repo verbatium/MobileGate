@@ -1,6 +1,5 @@
-package ee.valja7.gate;
+package ee.valja7.gate.modem;
 
-import ee.valja7.gate.modem.SerialModem;
 import org.apache.log4j.Logger;
 
 import javax.inject.Singleton;
@@ -65,7 +64,7 @@ public class PhoneEventListener {
         }
     }
 
-    void initModem(SerialModem modem) {
+    public void initModem(SerialModem modem) {
         this.modem = modem;
     }
 

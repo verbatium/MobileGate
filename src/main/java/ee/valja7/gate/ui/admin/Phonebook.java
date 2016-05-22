@@ -1,7 +1,7 @@
 package ee.valja7.gate.ui.admin;
 
-import ee.valja7.gate.PhoneBookEntry;
-import ee.valja7.gate.PhoneBookService;
+import ee.valja7.gate.modem.PhoneBookEntry;
+import ee.valja7.gate.modem.PhoneBookService;
 import ee.valja7.gate.ui.View;
 import org.apache.log4j.Logger;
 

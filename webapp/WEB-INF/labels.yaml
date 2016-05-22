@@ -78,3 +78,27 @@ menu.admin.settings.description:
   en: "Description"
   et: "Kirjeldus"
   ru: "Описание"
+menu.admin.logs:
+  en: "Logs"
+  et: "Loogid"
+  ru: "Logs"
+menu.admin.logs.date:
+  en: "date"
+  et: "Kuupäev"
+  ru: "Date"
+menu.admin.logs.level:
+  en: "Level"
+  et: "Tase"
+  ru: "Level"
+menu.admin.logs.logger:
+  en: "Logger"
+  et: "Logger"
+  ru: "Logger"
+menu.admin.logs.message:
+  en: "Message"
+  et: "Message"
+  ru: "Message"
+menu.admin.modem:
+  en: "Modem"
+  et: "Modem"
+  ru: "Modem"

@@ -1,5 +1,6 @@
-package ee.valja7.gate;
+package ee.valja7.gate.modem;
 
+import ee.valja7.gate.HibernateContext;
 import ee.valja7.gate.persistence.Categories;
 import ee.valja7.gate.persistence.PreferenceEntity;
 import ee.valja7.gate.persistence.PreferenceTypes;
@@ -20,7 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Singleton
-class SchedulerService {
+public class SchedulerService {
     private static final Logger LOG = Logger.getLogger(SchedulerService.class);
     final PreferencesService prefs;
     private final ScheduledExecutorService mainScheduler = Executors.newSingleThreadScheduledExecutor();
@@ -119,7 +120,7 @@ class SchedulerService {
         closeTime = new Date(openTime.getTime() + openedTime);
     }
 
-    void openGate(Runnable job) {
+    public void openGate(Runnable job) {
         final Runnable task = job != null ? job : () -> LOG.info("Open: " + PhoneEvent.DateToString(new Date()));
         nextTime();
         LOG.info("Next open Time:" + PhoneEvent.DateToString(openTime));

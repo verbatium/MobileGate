@@ -1,6 +1,5 @@
-package ee.valja7.gate;
+package ee.valja7.gate.modem;
 
-import ee.valja7.gate.modem.SerialModem;
 import ee.valja7.gate.modem.commands.CmeError;
 import ee.valja7.gate.modem.commands.CommandState;
 import ee.valja7.gate.modem.commands.McPlusCommand;
@@ -48,7 +47,7 @@ public class PhoneBookService {
         return getFirstFreeInteger(arr, 0);
     }
 
-    void read(SerialModem modem) {
+    public void read(SerialModem modem) {
         UCS2 = true;
         if (modem != null)
             this.modem = modem;

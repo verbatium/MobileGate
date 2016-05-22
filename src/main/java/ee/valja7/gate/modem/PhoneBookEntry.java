@@ -1,4 +1,4 @@
-package ee.valja7.gate;
+package ee.valja7.gate.modem;
 
 import org.apache.commons.codec.binary.Hex;
 

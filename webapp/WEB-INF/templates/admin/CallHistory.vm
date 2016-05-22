@@ -1,4 +1,4 @@
-#* @vtlvariable name="historyItems" type="java.util.Collection<ee.valja7.gate.PhoneEvent>" *#
+#* @vtlvariable name="historyItems" type="java.util.Collection<ee.valja7.gate.modem.PhoneEvent>" *#
 #@admin_layout("CallHistory")
 items: $historylenght
 <div class="container">

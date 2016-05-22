@@ -1,0 +1,21 @@
+#* @vtlvariable name="entry" type="ee.valja7.gate.persistence.LogEntity" *#
+#@admin_layout("logs")
+<div class="container-fluid">
+    <div class="table">
+        <div class="row header blue">
+            <div class="cell">$Labels.get("menu.admin.logs.date")</div>
+            <div class="cell">$Labels.get("menu.admin.logs.level")</div>
+            <div class="cell">$Labels.get("menu.admin.logs.logger")</div>
+            <div class="cell">$Labels.get("menu.admin.logs.message")</div>
+        </div>
+        #foreach( $entry in $entries)
+            <div class="row">
+                <div class="cell">$entry.getDate()</div>
+                <div class="cell">$entry.getLevel()</div>
+                <div class="cell">$entry.getLogger()</div>
+                <div class="cell">$!entry.getMessage()</div>
+            </div>
+        #end
+    </div>
+</div>
+#end

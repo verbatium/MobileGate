@@ -2,6 +2,9 @@ package ee.valja7.gate;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import ee.valja7.gate.modem.PhoneBookService;
+import ee.valja7.gate.modem.PhoneEventListener;
+import ee.valja7.gate.modem.SchedulerService;
 import ee.valja7.gate.modem.SerialModem;
 import ee.valja7.gate.modem.commands.SimLock;
 import ee.valja7.gate.persistence.PreferencesService;

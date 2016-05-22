@@ -1,8 +1,8 @@
 package ee.valja7.gate.ui.admin;
 
 import com.google.inject.internal.util.ImmutableMap;
-import ee.valja7.gate.PhoneBookEntry;
-import ee.valja7.gate.PhoneBookService;
+import ee.valja7.gate.modem.PhoneBookEntry;
+import ee.valja7.gate.modem.PhoneBookService;
 import ee.valja7.gate.ui.Action;
 import org.apache.log4j.Logger;
 

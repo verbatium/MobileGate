@@ -1,6 +1,5 @@
 package ee.valja7.gate.modem;
 
-import ee.valja7.gate.PhoneEventListener;
 import ee.valja7.gate.modem.commands.*;
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
@@ -114,7 +113,7 @@ public class SerialModem {
                             if (start < i - 1) {
                                 encoding = CharsetDetector.detect(buffer, start, i - start);
                                 s = message + new String(buffer, start, i - start, encoding);
-                                LOG.debug("[" + encoding + "]: < " + s);
+                                LOG.debug("[" + encoding + "]: < " + s.replace("\"", "\"\""));
                                 processMessage(s);
                                 message = "";
                             }

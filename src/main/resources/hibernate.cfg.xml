@@ -22,5 +22,6 @@
         <mapping class="ee.valja7.gate.persistence.UserRightEntity"/>
         <mapping class="ee.valja7.gate.persistence.UsersEntity"/>
         <mapping class="ee.valja7.gate.persistence.PreferenceEntity"/>
+        <mapping class="ee.valja7.gate.persistence.LogEntity"/>
     </session-factory>
 </hibernate-configuration>

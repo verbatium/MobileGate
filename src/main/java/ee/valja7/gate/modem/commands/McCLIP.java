@@ -1,6 +1,6 @@
 package ee.valja7.gate.modem.commands;
 
-import ee.valja7.gate.PhoneEventListener;
+import ee.valja7.gate.modem.PhoneEventListener;
 import ee.valja7.gate.modem.SerialModem;
 
 import java.util.regex.Pattern;

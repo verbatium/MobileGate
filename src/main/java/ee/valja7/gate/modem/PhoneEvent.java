@@ -1,4 +1,4 @@
-package ee.valja7.gate;
+package ee.valja7.gate.modem;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class PhoneEvent {
+public class PhoneEvent {
     private static String rx = "\\+CLIP: \"(?<phone>\\+?\\d+)\",(?<type>\\d+),,,(\"(?<enabled>@?)(?<name>\\+?[^\"]*)\")?,\\d?";
     private static Pattern pattern = Pattern.compile(rx);
     private final Date callStarted;

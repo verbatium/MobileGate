@@ -2,6 +2,7 @@ package ee.valja7.gate;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import ee.valja7.gate.persistence.LogEntity;
 import ee.valja7.gate.persistence.PreferenceEntity;
 import ee.valja7.gate.persistence.UserEntity;
 import org.apache.velocity.app.VelocityEngine;
@@ -38,7 +39,8 @@ abstract class GuiceModule extends AbstractModule {
 
         List<Class<?>> entities = asList(
                 UserEntity.class,
-                PreferenceEntity.class
+                PreferenceEntity.class,
+                LogEntity.class
         );
 
         for (Class<?> entity : entities) {
