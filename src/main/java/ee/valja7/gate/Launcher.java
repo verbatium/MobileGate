@@ -24,6 +24,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class Launcher {
     @Inject
     PreferencesService preferencesService;
     private SerialModem modem;
-    private Map<String, PreferenceEntity> preferenceces;
+    private Map<String, PreferenceEntity> preferences;
 
     public Launcher() {
     }
@@ -81,9 +82,9 @@ public class Launcher {
     }
 
     private void run() {
-        this.init_modem();
-        Runnable task = () -> Launcher.this.modem.writeString("+CLIP: \"+372000000\",145,,,\"@Manual Open\",0");
-        this.schedulerService.openGate(task);
+        CompletableFuture.runAsync(this::loadPreferences)
+                .thenRun(this::init_modem)
+                .thenRun(this::setSchedulerFunction);
         Server server = new Server(8080);
         server.setHandler(createHandler());
 
@@ -96,15 +97,26 @@ public class Launcher {
 
     }
 
-    private void init_modem() {
+    private void setSchedulerFunction() {
+        this.schedulerService.openGate(this::openGate);
+    }
+
+    private void openGate() {
+        Launcher.this.modem.writeString("+CLIP: \"+372000000\",145,,,\"@Manual Open\",0");
+    }
+
+
+    private void loadPreferences() {
         HibernateContext.openSession();
         List<PreferenceEntity> prefList = preferencesService.getByCategory(Categories.Modem);
-        preferenceces = prefList.stream()
+        preferences = prefList.stream()
                 .collect(Collectors.toMap(PreferenceEntity::getName,
                         Function.identity()));
-
         portName = get("port", "/dev/ttyUSB2");
         HibernateContext.closeSession();
+    }
+
+    private void init_modem() {
 
         this.modem = new SerialModem(portName);
         if (!this.modem.isReady()) {
@@ -148,11 +160,11 @@ public class Launcher {
 
     private PreferenceEntity getPreferenceEntity(String name, String defaultValue) {
         PreferenceEntity preferenceEntity;
-        if (preferenceces.containsKey(name)) {
-            preferenceEntity = preferenceces.get(name);
+        if (preferences.containsKey(name)) {
+            preferenceEntity = preferences.get(name);
         } else {
             preferenceEntity = new PreferenceEntity(Categories.Modem, name, PreferenceTypes.Long, defaultValue);
-            preferenceces.put(name, preferenceEntity);
+            preferences.put(name, preferenceEntity);
         }
         return preferenceEntity;
     }
@@ -160,7 +172,7 @@ public class Launcher {
     public void save() {
         Session session = HibernateContext.openSession();
         put("port", portName);
-        preferenceces.values().stream().forEach(o -> session.saveOrUpdate(o));
+        preferences.values().stream().forEach(o -> session.saveOrUpdate(o));
         session.flush();
 
         HibernateContext.closeSession();
